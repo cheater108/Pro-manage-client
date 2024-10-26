@@ -1,0 +1,31 @@
+.analytics_container {
+    background-color: #f9fcff;
+    border-radius: 12px;
+    padding: 2rem 2rem 1rem;
+}
+
+.info {
+    display: flex;
+    width: 400px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
+
+.left {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.right {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.bullet {
+    background-color: #90c4cc;
+    width: 12px;
+    height: 12px;
+    border-radius: 100%;
+}

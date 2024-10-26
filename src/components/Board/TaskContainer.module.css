@@ -1,0 +1,37 @@
+.container {
+    min-width: 360px;
+    background: #eef2f5;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.heading {
+    font-family: Poppins, sans-serif;
+    font-weight: 500;
+}
+
+.collapse {
+    cursor: pointer;
+}
+
+.add_icon {
+    margin-right: 22px;
+    cursor: pointer;
+}
+
+.tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex-grow: 1;
+    overflow: auto;
+}

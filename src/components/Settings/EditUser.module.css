@@ -1,0 +1,48 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+    width: 490px;
+}
+
+.input_container {
+    display: flex;
+    border: 1px solid #d0d0d0;
+    border-radius: 10px;
+    padding: 0.6rem;
+    gap: 10px;
+    align-items: center;
+}
+
+.input_container img {
+    width: 30px;
+}
+
+.input {
+    font-size: 1.1rem;
+    border: none;
+    outline: none;
+    flex-grow: 1;
+}
+
+.input::placeholder {
+    color: #828282;
+}
+
+.btn {
+    font-size: 1rem;
+    border: none;
+    border-radius: 22em;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+}
+
+.login_btn {
+    color: white;
+    background-color: var(--theme-primary);
+    margin-top: 25px;
+}
+
+.hide {
+    cursor: pointer;
+}
