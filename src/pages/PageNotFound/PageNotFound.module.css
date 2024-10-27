@@ -1,0 +1,36 @@
+.container {
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--theme-primary);
+}
+
+.notfound {
+    color: var(--color-alert);
+    font-family: Poppins, sans-serif;
+    font-weight: 600;
+    text-align: center;
+    font-size: 2rem;
+    width: 500px;
+}
+
+.btns {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn {
+    color: var(--theme-primary);
+    font-family: Poppins, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    width: 150px;
+    cursor: pointer;
+    background-color: white;
+    margin-top: 25px;
+}

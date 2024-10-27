@@ -7,6 +7,7 @@ import {
     HomePage,
     SettingsPage,
     SharedTask,
+    PageNotFound,
 } from "./pages";
 import LoginForm from "./components/HomePage/LoginForm";
 import RegisterForm from "./components/HomePage/RegisterForm";
@@ -57,6 +58,7 @@ function App() {
                     <Route path="register" element={<RegisterForm />} />
                 </Route>
                 <Route path="/shared/:id" element={<SharedTask />} />
+                <Route path="*" element={<PageNotFound />} />
             </Routes>
         </BrowserRouter>
     );
