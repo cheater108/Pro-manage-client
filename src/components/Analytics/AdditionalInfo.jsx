@@ -9,17 +9,24 @@ function AdditionalInfo() {
         low: 0,
         due: 0,
     });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         function loadInfo() {
             getAdditionalInfo()
                 .then((data) => {
                     setInfo(data);
+                    setLoading(false);
                 })
                 .catch((err) => console.log(err));
         }
         loadInfo();
     }, []);
+
+    if (loading) {
+        return <div className={styles.analytics_loading}></div>;
+    }
+
     return (
         <div className={styles.analytics_container}>
             <div className={styles.info}>

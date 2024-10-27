@@ -6,12 +6,13 @@ import UserList from "../common/UserList";
 function ShareBoard({ setShowShare }) {
     const [assign, setAssign] = useState(false);
     const [user, setUser] = useState({ assigned_email: "" });
+    const [shared, setShared] = useState(false);
 
     function handleShare() {
         shareBoard({ share_email: user.assigned_email })
             .then((data) => {
                 console.log(data);
-                setShowShare(false);
+                setShared(true);
             })
             .catch((err) => console.log(err));
     }
@@ -19,38 +20,63 @@ function ShareBoard({ setShowShare }) {
     return (
         <div className={modal_style.modal}>
             <div className={styles.container}>
-                <p className={styles.heading}>Add people to the board</p>
-                <div
-                    className={styles.assign_container}
-                    onClick={() => {
-                        setAssign((prev) => {
-                            return !prev;
-                        });
-                    }}
-                >
-                    <div className={styles.assign_input}>
-                        {user.assigned_email === ""
-                            ? "Enter the email"
-                            : user.assigned_email}
-                    </div>
-                    <img
-                        className={styles.dropdown}
-                        src={dropdown_icon}
-                        alt="assign"
-                    />
-                    {assign && <UserList setUser={setUser} view={setAssign} />}
-                </div>
-                <div className={styles.btns}>
-                    <button
-                        className={styles.cancel}
-                        onClick={() => setShowShare(false)}
-                    >
-                        Cancel
-                    </button>
-                    <button className={styles.add} onClick={handleShare}>
-                        Add email
-                    </button>
-                </div>
+                {!shared ? (
+                    <>
+                        <p className={styles.heading}>
+                            Add people to the board
+                        </p>
+                        <div
+                            className={styles.assign_container}
+                            onClick={() => {
+                                setAssign((prev) => {
+                                    return !prev;
+                                });
+                            }}
+                        >
+                            <div className={styles.assign_input}>
+                                {user.assigned_email === ""
+                                    ? "Enter the email"
+                                    : user.assigned_email}
+                            </div>
+                            <img
+                                className={styles.dropdown}
+                                src={dropdown_icon}
+                                alt="assign"
+                            />
+                            {assign && (
+                                <UserList setUser={setUser} view={setAssign} />
+                            )}
+                        </div>
+                        <div className={styles.btns}>
+                            <button
+                                className={styles.cancel}
+                                onClick={() => setShowShare(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className={styles.add}
+                                onClick={handleShare}
+                            >
+                                Add email
+                            </button>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <p className={styles.heading_success}>
+                            {user.assigned_email} added to board
+                        </p>
+                        <div className={styles.btns}>
+                            <button
+                                className={styles.btn_success}
+                                onClick={() => setShowShare(false)}
+                            >
+                                Okay, got it!
+                            </button>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

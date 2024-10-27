@@ -7,9 +7,11 @@ import {
     countSelected,
     dateString,
     status_list,
+    datePassed,
+    getNameTag,
 } from "../../utils/helpers";
 import { useContext, useEffect, useState } from "react";
-import EditTodo from "./EditTodo";
+import EditTask from "./EditTask";
 import DeleteTask from "./DeleteTask";
 import { updateTask } from "../../api/taskApi";
 import { BoardContext } from "../common/BoardProvider";
@@ -80,7 +82,7 @@ function TaskCard({ task, cardType, collapse }) {
         setTodos(task.checklist);
     }, [task]);
 
-    // when we check todo update the task in the backend
+    // when we check a todo, update the task in the backend
     useEffect(() => {
         updateTask(task._id, { ...task, checklist: todos });
     }, [todos]);
@@ -96,6 +98,11 @@ function TaskCard({ task, cardType, collapse }) {
                 <div className={styles.top_left}>
                     <div className={priorityStyle.style}></div>
                     <p>{task.priority}</p>
+                    {task.assigned_email && (
+                        <div className={styles.assigned}>
+                            <p>{getNameTag(task.assigned_email)}</p>
+                        </div>
+                    )}
                 </div>
                 <img
                     className={styles.menu_icon}
@@ -135,7 +142,8 @@ function TaskCard({ task, cardType, collapse }) {
                 {task.due_date && (
                     <div
                         className={`${styles.date_style} ${
-                            isHighPriority && "high_priority_date"
+                            (isHighPriority || datePassed(task.due_date)) &&
+                            "high_priority_date"
                         } ${isDoneType && "done_date"}`}
                     >
                         {dateString(task.due_date)}
@@ -183,7 +191,7 @@ function TaskCard({ task, cardType, collapse }) {
                     </p>
                 </div>
             )}
-            {edit && <EditTodo taskData={task} setEdit={setEdit} />}
+            {edit && <EditTask taskData={task} setEdit={setEdit} />}
             {del && <DeleteTask id={task._id} setDel={setDel} />}
             {toast && <CustomToast text={"Link copied"} setToast={setToast} />}
         </div>

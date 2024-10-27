@@ -1,23 +1,29 @@
 import modal_style from "./Modal.module.css";
-import styles from "./AddTodo.module.css";
+import styles from "./AddTask.module.css";
 import dropdown_icon from "../../assets/dropdown.svg";
-import { useContext, useState } from "react";
-import { updateTask } from "../../api/taskApi";
-import {
-    priorityList,
-    countSelected,
-    isOwner,
-    getUser,
-} from "../../utils/helpers";
+import { useContext, useRef, useState } from "react";
+import { postTask } from "../../api/taskApi";
+import { priorityList, countSelected } from "../../utils/helpers";
 import { BoardContext } from "../common/BoardProvider";
-import Todo from "../common/Todo";
 import UserList from "../common/UserList";
+import Todo from "../common/Todo";
+import { validateTask } from "../../utils/validators";
+import toast from "react-hot-toast";
 
-function EditTodo({ taskData, setEdit }) {
+function AddTask({ setShowAddTodo }) {
     const { updateBoard } = useContext(BoardContext);
-    const [task, setTask] = useState(taskData);
-    const [todos, setTodos] = useState(taskData.checklist);
+    const [task, setTask] = useState({
+        title: "",
+        priority: "Low Priority",
+        due_date: "",
+        assigned_email: "",
+    });
+
+    const [todos, setTodos] = useState([
+        { task: "Task completed", done: false, id: 0 },
+    ]);
     const [assign, setAssign] = useState(false);
+    const dateRef = useRef(null);
 
     function addTodo() {
         setTodos((prev) => [
@@ -31,12 +37,35 @@ function EditTodo({ taskData, setEdit }) {
     }
 
     function submitTask() {
-        updateTask(task._id, { ...task, checklist: todos })
+        const { valid, error, message } = validateTask({
+            ...task,
+            checklist: todos,
+        });
+
+        if (!valid) {
+            if (error.title) {
+                toast.error(message.title);
+            }
+            if (error.checklist) {
+                toast.error(message.checklist);
+            }
+            if (error.priority) {
+                toast.error(message.priority);
+            }
+            return;
+        }
+
+        postTask({ ...task, checklist: todos })
             .then(() => {
+                toast.success("Successfully created task");
                 updateBoard();
-                setEdit(false);
+                setShowAddTodo(false);
             })
             .catch((err) => console.log(err));
+    }
+
+    function openCalender() {
+        dateRef.current.showPicker();
     }
     return (
         <div className={modal_style.modal}>
@@ -88,31 +117,31 @@ function EditTodo({ taskData, setEdit }) {
                         );
                     })}
                 </div>
-                {isOwner(getUser().email, task.creator) && (
-                    <div className={styles.assign}>
-                        <p className={styles.title}>Assign to</p>
-                        <div className={styles.assign_container}>
-                            <input
-                                className={styles.assign_input}
-                                type="text"
-                                name="assigned_email"
-                                placeholder="Add an assignee"
-                                value={task.assigned_email}
-                            />
-                            <img
-                                className={styles.dropdown}
-                                src={dropdown_icon}
-                                alt="assign"
-                                onClick={() => {
-                                    setAssign((prev) => !prev);
-                                }}
-                            />
-                            {assign && (
-                                <UserList setUser={setTask} view={setAssign} />
-                            )}
+                <div className={styles.assign}>
+                    <p className={styles.title}>Assign to</p>
+                    <div
+                        className={styles.assign_container}
+                        onClick={() => {
+                            setAssign((prev) => {
+                                return !prev;
+                            });
+                        }}
+                    >
+                        <div className={styles.assign_input}>
+                            {task.assigned_email === ""
+                                ? "Add a assignee"
+                                : task.assigned_email}
                         </div>
+                        <img
+                            className={styles.dropdown}
+                            src={dropdown_icon}
+                            alt="assign"
+                        />
+                        {assign && (
+                            <UserList setUser={setTask} view={setAssign} />
+                        )}
                     </div>
-                )}
+                </div>
                 <div className={styles.checklist_heading}>
                     <p className={styles.checklist_text}>
                         Checklist ({countSelected(todos)}/{todos.length})
@@ -121,17 +150,15 @@ function EditTodo({ taskData, setEdit }) {
                 </div>
                 <div className={styles.task_list_container}>
                     <div className={styles.todo_wrapper}>
-                        {todos.map((todo) => {
-                            return (
-                                <Todo
-                                    key={todo._id || todo.id}
-                                    task={todo.task}
-                                    done={todo.done}
-                                    setTodos={setTodos}
-                                    id={todo._id || todo.id}
-                                />
-                            );
-                        })}
+                        {todos.map((todo) => (
+                            <Todo
+                                key={todo.id}
+                                task={todo.task}
+                                done={todo.done}
+                                setTodos={setTodos}
+                                id={todo.id}
+                            />
+                        ))}
                     </div>
                     <p className={styles.addnew} onClick={addTodo}>
                         {" "}
@@ -139,16 +166,35 @@ function EditTodo({ taskData, setEdit }) {
                     </p>
                 </div>
                 <div className={styles.btn_container}>
-                    <input
-                        name="due_date"
-                        type="date"
-                        value={task.due_date?.substr(0, 10) || ""}
-                        onChange={handleTaskChange}
-                    />
+                    <div className={styles.date_container}>
+                        <div
+                            className={styles.date_display}
+                            onClick={openCalender}
+                        >
+                            {task.due_date === ""
+                                ? "Select Due Date"
+                                : task.due_date
+                                      .replaceAll("-", "/")
+                                      .split("/")
+                                      .reverse()
+                                      .join("/")}
+                        </div>
+                        <input
+                            className={styles.date_input}
+                            name="due_date"
+                            type="date"
+                            value={task.due_date}
+                            onChange={handleTaskChange}
+                            min={new Date().toISOString().split("T")[0]}
+                            id="date"
+                            ref={dateRef}
+                        />
+                    </div>
+
                     <div className={styles.btns}>
                         <button
                             className={styles.cancel}
-                            onClick={() => setEdit(false)}
+                            onClick={() => setShowAddTodo(false)}
                         >
                             Cancel
                         </button>
@@ -162,4 +208,4 @@ function EditTodo({ taskData, setEdit }) {
     );
 }
 
-export default EditTodo;
+export default AddTask;

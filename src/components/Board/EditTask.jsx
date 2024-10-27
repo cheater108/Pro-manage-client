@@ -1,25 +1,24 @@
 import modal_style from "./Modal.module.css";
-import styles from "./AddTodo.module.css";
+import styles from "./AddTask.module.css";
 import dropdown_icon from "../../assets/dropdown.svg";
-import { useContext, useRef, useState } from "react";
-import { postTask } from "../../api/taskApi";
-import { priorityList, countSelected } from "../../utils/helpers";
+import { useContext, useState, useRef } from "react";
+import { updateTask } from "../../api/taskApi";
+import {
+    priorityList,
+    countSelected,
+    isOwner,
+    getUser,
+} from "../../utils/helpers";
 import { BoardContext } from "../common/BoardProvider";
-import UserList from "../common/UserList";
 import Todo from "../common/Todo";
+import UserList from "../common/UserList";
+import toast from "react-hot-toast";
+import { validateTask } from "../../utils/validators";
 
-function AddTodo({ setShowAddTodo }) {
+function EditTask({ taskData, setEdit }) {
     const { updateBoard } = useContext(BoardContext);
-    const [task, setTask] = useState({
-        title: "",
-        priority: "Low Priority",
-        due_date: "",
-        assigned_email: "",
-    });
-
-    const [todos, setTodos] = useState([
-        { task: "Task completed", done: false, id: 0 },
-    ]);
+    const [task, setTask] = useState(taskData);
+    const [todos, setTodos] = useState(taskData.checklist);
     const [assign, setAssign] = useState(false);
     const dateRef = useRef(null);
 
@@ -35,10 +34,29 @@ function AddTodo({ setShowAddTodo }) {
     }
 
     function submitTask() {
-        postTask({ ...task, checklist: todos })
+        const { valid, error, message } = validateTask({
+            ...task,
+            checklist: todos,
+        });
+
+        if (!valid) {
+            if (error.title) {
+                toast.error(message.title);
+            }
+            if (error.checklist) {
+                toast.error(message.checklist);
+            }
+            if (error.priority) {
+                toast.error(message.priority);
+            }
+            return;
+        }
+
+        updateTask(task._id, { ...task, checklist: todos })
             .then(() => {
+                toast.success("Successfully updated task");
                 updateBoard();
-                setShowAddTodo(false);
+                setEdit(false);
             })
             .catch((err) => console.log(err));
     }
@@ -96,31 +114,31 @@ function AddTodo({ setShowAddTodo }) {
                         );
                     })}
                 </div>
-                <div className={styles.assign}>
-                    <p className={styles.title}>Assign to</p>
-                    <div
-                        className={styles.assign_container}
-                        onClick={() => {
-                            setAssign((prev) => {
-                                return !prev;
-                            });
-                        }}
-                    >
-                        <div className={styles.assign_input}>
-                            {task.assigned_email === ""
-                                ? "Add a assignee"
-                                : task.assigned_email}
+                {isOwner(getUser().email, task.creator) && (
+                    <div className={styles.assign}>
+                        <p className={styles.title}>Assign to</p>
+                        <div className={styles.assign_container}>
+                            <input
+                                className={styles.assign_input}
+                                type="text"
+                                name="assigned_email"
+                                placeholder="Add an assignee"
+                                value={task.assigned_email}
+                            />
+                            <img
+                                className={styles.dropdown}
+                                src={dropdown_icon}
+                                alt="assign"
+                                onClick={() => {
+                                    setAssign((prev) => !prev);
+                                }}
+                            />
+                            {assign && (
+                                <UserList setUser={setTask} view={setAssign} />
+                            )}
                         </div>
-                        <img
-                            className={styles.dropdown}
-                            src={dropdown_icon}
-                            alt="assign"
-                        />
-                        {assign && (
-                            <UserList setUser={setTask} view={setAssign} />
-                        )}
                     </div>
-                </div>
+                )}
                 <div className={styles.checklist_heading}>
                     <p className={styles.checklist_text}>
                         Checklist ({countSelected(todos)}/{todos.length})
@@ -129,15 +147,17 @@ function AddTodo({ setShowAddTodo }) {
                 </div>
                 <div className={styles.task_list_container}>
                     <div className={styles.todo_wrapper}>
-                        {todos.map((todo) => (
-                            <Todo
-                                key={todo.id}
-                                task={todo.task}
-                                done={todo.done}
-                                setTodos={setTodos}
-                                id={todo.id}
-                            />
-                        ))}
+                        {todos.map((todo) => {
+                            return (
+                                <Todo
+                                    key={todo._id || todo.id}
+                                    task={todo.task}
+                                    done={todo.done}
+                                    setTodos={setTodos}
+                                    id={todo._id || todo.id}
+                                />
+                            );
+                        })}
                     </div>
                     <p className={styles.addnew} onClick={addTodo}>
                         {" "}
@@ -150,9 +170,10 @@ function AddTodo({ setShowAddTodo }) {
                             className={styles.date_display}
                             onClick={openCalender}
                         >
-                            {task.due_date === ""
+                            {task.due_date === null || task.due_date === ""
                                 ? "Select Due Date"
                                 : task.due_date
+                                      ?.split("T")[0]
                                       .replaceAll("-", "/")
                                       .split("/")
                                       .reverse()
@@ -162,18 +183,17 @@ function AddTodo({ setShowAddTodo }) {
                             className={styles.date_input}
                             name="due_date"
                             type="date"
-                            value={task.due_date}
+                            value={task.due_date?.split("T")[0]}
                             onChange={handleTaskChange}
                             min={new Date().toISOString().split("T")[0]}
                             id="date"
                             ref={dateRef}
                         />
                     </div>
-
                     <div className={styles.btns}>
                         <button
                             className={styles.cancel}
-                            onClick={() => setShowAddTodo(false)}
+                            onClick={() => setEdit(false)}
                         >
                             Cancel
                         </button>
@@ -187,4 +207,4 @@ function AddTodo({ setShowAddTodo }) {
     );
 }
 
-export default AddTodo;
+export default EditTask;

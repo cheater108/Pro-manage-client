@@ -8,6 +8,8 @@ import { editUser } from "../../api/userApi";
 import { getUser, logout } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { validateEditUser } from "../../utils/validators";
+import { toFormData } from "axios";
 
 function EditUser() {
     const navigate = useNavigate();
@@ -25,6 +27,14 @@ function EditUser() {
 
     function handleSubmit(e) {
         e.preventDefault();
+        const { valid, error, message } = validateEditUser(userData);
+        console.log(valid, message);
+        if (!valid) {
+            if (error.new_password) {
+                toast.error(message.new_password);
+                return;
+            }
+        }
         editUser(userData)
             .then((data) => {
                 console.log(data);

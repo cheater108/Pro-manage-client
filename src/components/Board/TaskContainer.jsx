@@ -2,8 +2,9 @@ import styles from "./TaskContainer.module.css";
 import add_icon from "../../assets/add.svg";
 import collapse_icon from "../../assets/collapse.svg";
 import TaskCard from "./TaskCard";
-import AddTodo from "./AddTodo";
+import AddTask from "./AddTask";
 import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 
 function TaskContainer({ type, tasks }) {
     const [collapse, setCollapse] = useState(false);
@@ -17,6 +18,7 @@ function TaskContainer({ type, tasks }) {
     }
     return (
         <div className={`${styles.container}`}>
+            <Toaster />
             <div className={styles.header}>
                 <p className={styles.heading}>{type}</p>
                 <div>
@@ -46,7 +48,7 @@ function TaskContainer({ type, tasks }) {
                     />
                 ))}
             </div>
-            {showAddTodo && <AddTodo setShowAddTodo={setShowAddTodo} />}
+            {showAddTodo && <AddTask setShowAddTodo={setShowAddTodo} />}
         </div>
     );
 }

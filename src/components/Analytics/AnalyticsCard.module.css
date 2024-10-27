@@ -4,6 +4,17 @@
     padding: 2rem 2rem 1rem;
 }
 
+.analytics_loading {
+    width: 464px;
+    height: 239px;
+    background-color: #f9fcff;
+    border-radius: 12px;
+    background: linear-gradient(-45deg, #eee 40%, #fafafa 50%, #eee 60%);
+    background-size: 300%;
+    background-position-x: 100%;
+    animation: shimmer 1s infinite linear;
+}
+
 .info {
     display: flex;
     width: 400px;

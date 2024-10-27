@@ -1,6 +1,7 @@
 import styles from "./HomePage.module.css";
 import atronaut from "../../assets/astronaut.svg";
 import { Outlet } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 function HomePage() {
     return (
@@ -15,6 +16,7 @@ function HomePage() {
             <div className={styles.right}>
                 <Outlet />
             </div>
+            <Toaster />
         </div>
     );
 }

@@ -4,16 +4,12 @@ import board_icon from "../../assets/layout.svg";
 import database_icon from "../../assets/database.svg";
 import setting_icon from "../../assets/settings.svg";
 import logout_icon from "../../assets/logout.svg";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { logout } from "../../utils/helpers";
+import { NavLink, Outlet } from "react-router-dom";
+import { useState } from "react";
+import Logout from "../../components/Board/Logout";
 
 function Dashboard() {
-    const navigate = useNavigate();
-
-    function handleLogout() {
-        logout();
-        navigate("/user");
-    }
+    const [showLogout, setShowLogout] = useState(false);
 
     return (
         <div className={styles.container}>
@@ -36,7 +32,10 @@ function Dashboard() {
                         <p className={styles.nav_text}>Settings</p>
                     </NavLink>
                 </div>
-                <button className={styles.logout_btn} onClick={handleLogout}>
+                <button
+                    className={styles.logout_btn}
+                    onClick={() => setShowLogout(true)}
+                >
                     <img src={logout_icon} alt="logout" />
                     <p className={styles.logout_text}>Log out</p>
                 </button>
@@ -44,6 +43,7 @@ function Dashboard() {
             <main className={styles.main}>
                 <Outlet />
             </main>
+            {showLogout && <Logout setShowLogout={setShowLogout} />}
         </div>
     );
 }

@@ -18,6 +18,23 @@
     gap: 7px;
 }
 
+.assigned {
+    width: 16px;
+    height: 16px;
+    background-color: #ffebeb;
+    color: black;
+    border-radius: 100%;
+    font-size: 7.5px;
+    font-family: DM Sans, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.assigned p {
+    margin-top: 1px;
+}
+
 .menu_icon {
     cursor: pointer;
 }

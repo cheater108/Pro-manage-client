@@ -35,3 +35,9 @@
     flex-grow: 1;
     overflow: auto;
 }
+.tasks::-webkit-scrollbar-track {
+    background-color: #d6eaf4;
+    padding: 5px;
+    border: 5px solid #d6eaf4;
+    border-radius: 10px;
+}

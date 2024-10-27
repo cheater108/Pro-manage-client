@@ -6,7 +6,8 @@ import account_icon from "../../assets/account.png";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { postUser } from "../../api/userApi";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { validateRegister } from "../../utils/validators";
 
 function RegisterForm() {
     const navigate = useNavigate();
@@ -24,8 +25,25 @@ function RegisterForm() {
 
     function handleSubmit(e) {
         e.preventDefault();
+        const { valid, error, message } = validateRegister(userData);
+
+        if (!valid) {
+            if (error.name) toast.error(message.name);
+            if (error.email) toast.error(message.email);
+            if (error.password) {
+                toast.error(message.password);
+                return;
+            }
+            if (error.confirm_pass) toast.error(message.confirm_pass);
+
+            return;
+        }
+
         postUser(userData)
-            .then((data) => navigate("/user"))
+            .then((data) => {
+                toast.success("User registered successfully");
+                navigate("/user");
+            })
             .catch((err) =>
                 toast.error(err.response?.data?.error || "something went wrong")
             );
@@ -33,7 +51,6 @@ function RegisterForm() {
 
     return (
         <div className={styles.outer}>
-            <Toaster />
             <h1 className={styles.login}>Register</h1>
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.input_container}>

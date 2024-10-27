@@ -86,6 +86,22 @@ function isOwner(owner_email, task_email) {
     return owner_email === task_email;
 }
 
+function datePassed(date_str) {
+    const curr_date = new Date();
+    const date = new Date(date_str);
+
+    curr_date.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+
+    if (date < curr_date) return true;
+    return false;
+}
+
+function getNameTag(email) {
+    const tag = email.substr(0, 2).toUpperCase();
+    return tag;
+}
+
 export {
     priorityList,
     status_list,
@@ -95,4 +111,6 @@ export {
     getUser,
     isOwner,
     logout,
+    datePassed,
+    getNameTag,
 };

@@ -5,7 +5,8 @@ import view_icon from "../../assets/view.png";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { postLogin } from "../../api/userApi";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { validateLogin } from "../../utils/validators";
 
 function LoginForm() {
     const navigate = useNavigate();
@@ -16,6 +17,14 @@ function LoginForm() {
 
     function handleSubmit(e) {
         e.preventDefault();
+
+        const { valid, error, message } = validateLogin(userData);
+        if (!valid) {
+            if (error.email) toast.error(message.email);
+            if (error.password) toast.error(message.password);
+            return;
+        }
+
         postLogin(userData)
             .then((data) => {
                 localStorage.setItem("token", data.token);
@@ -29,7 +38,6 @@ function LoginForm() {
     }
     return (
         <div className={styles.outer}>
-            <Toaster />
             <h1 className={styles.login}>Login</h1>
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.input_container}>

@@ -1,9 +1,21 @@
-import { useContext } from "react";
+import { useEffect, useState } from "react";
 import styles from "./AnalyticsCard.module.css";
-import { BoardContext } from "../common/BoardProvider";
+import { getBoard } from "../../api/boardApi";
 
 function AnalyticsCard() {
-    const { board } = useContext(BoardContext);
+    const [board, setBoard] = useState({});
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        getBoard("All").then((data) => {
+            setBoard(data);
+            setLoading(false);
+        });
+    });
+
+    if (loading) {
+        return <div className={styles.analytics_loading}></div>;
+    }
+
     return (
         <div className={styles.analytics_container}>
             <div className={styles.info}>
