@@ -35,6 +35,10 @@
     cursor: pointer;
 }
 
+.assign_btn:hover {
+    background-color: #e6e6e6;
+}
+
 .email_inner {
     display: flex;
     align-items: center;

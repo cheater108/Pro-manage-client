@@ -122,7 +122,30 @@ function EditTask({ taskData, setEdit }) {
                 {isOwner(getUser().email, task.creator) && (
                     <div className={styles.assign}>
                         <p className={styles.title}>Assign to</p>
-                        <div className={styles.assign_container}>
+                        <div
+                            className={styles.assign_container}
+                            onClick={() => {
+                                setAssign((prev) => {
+                                    return !prev;
+                                });
+                            }}
+                        >
+                            <div className={styles.assign_input}>
+                                {task.assigned_email === "" ||
+                                !task.assigned_email
+                                    ? "Add a assignee"
+                                    : task.assigned_email}
+                            </div>
+                            <img
+                                className={styles.dropdown}
+                                src={dropdown_icon}
+                                alt="assign"
+                            />
+                            {assign && (
+                                <UserList setUser={setTask} view={setAssign} />
+                            )}
+                        </div>
+                        {/* <div className={styles.assign_container}>
                             <input
                                 className={styles.assign_input}
                                 type="text"
@@ -141,7 +164,7 @@ function EditTask({ taskData, setEdit }) {
                             {assign && (
                                 <UserList setUser={setTask} view={setAssign} />
                             )}
-                        </div>
+                        </div> */}
                     </div>
                 )}
                 <div className={styles.checklist_heading}>

@@ -35,7 +35,7 @@ function SharedTask() {
             </div>
             <div className={styles.main}>
                 {loading ? (
-                    <p>Loading</p>
+                    <p className={styles.loading}>Loading...</p>
                 ) : (
                     !notFound && <PublicTaskCard task={task} />
                 )}
