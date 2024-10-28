@@ -27,7 +27,7 @@ function EditUser() {
     function handleSubmit(e) {
         e.preventDefault();
         const { valid, error, message } = validateEditUser(userData);
-        console.log(valid, message);
+
         if (!valid) {
             if (error.new_password) {
                 toast.error(message.new_password);
@@ -36,7 +36,6 @@ function EditUser() {
         }
         editUser(userData)
             .then((data) => {
-                console.log(data);
                 logout();
                 navigate("/user");
             })

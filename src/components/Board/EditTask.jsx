@@ -26,7 +26,7 @@ function EditTask({ taskData, setEdit }) {
     function addTodo() {
         setTodos((prev) => [
             ...prev,
-            { task: "Task", done: false, id: Date.now() },
+            { task: "", done: false, id: Date.now() },
         ]);
     }
 
@@ -61,7 +61,9 @@ function EditTask({ taskData, setEdit }) {
                 setEdit(false);
             })
             .catch((err) => {
-                console.log(err);
+                toast.error(
+                    err.response?.data?.error || "something went wrong"
+                );
                 setLoading(false);
             });
     }

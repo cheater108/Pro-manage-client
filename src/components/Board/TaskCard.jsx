@@ -59,7 +59,9 @@ function TaskCard({ task, cardType, collapse }) {
     function changeTaskStatus(e) {
         updateTask(task._id, { ...task, status: e.target.name })
             .then(() => updateBoard())
-            .catch((err) => console.log(err));
+            .catch((err) =>
+                toast.error(err.response?.data?.error || "something went wrong")
+            );
     }
 
     function shareTask() {
@@ -74,7 +76,9 @@ function TaskCard({ task, cardType, collapse }) {
                     .writeText(shareLink)
                     .then(() => setToast(true));
             })
-            .catch((err) => console.log(err));
+            .catch((err) =>
+                toast.error(err.response?.data?.error || "something went wrong")
+            );
     }
 
     // when we update a task using edit, reflect those changes

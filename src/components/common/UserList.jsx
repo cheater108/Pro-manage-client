@@ -34,7 +34,7 @@ function UserList({ setUser, view }) {
     return (
         <div className={styles.emails_container}>
             {users.map((user) => (
-                <div className={styles.email}>
+                <div className={styles.email} key={user.email}>
                     <div className={styles.email_inner}>
                         <div className={styles.initials}>
                             {getNameTag(user.email)}

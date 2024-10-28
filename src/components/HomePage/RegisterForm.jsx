@@ -1,8 +1,8 @@
 import styles from "./LoginForm.module.css";
-import email_icon from "../../assets/email.png";
-import lock_icon from "../../assets/lock.png";
-import view_icon from "../../assets/view.png";
-import account_icon from "../../assets/account.png";
+import email_icon from "../../assets/email.svg";
+import lock_icon from "../../assets/lock.svg";
+import view_icon from "../../assets/view.svg";
+import account_icon from "../../assets/account.svg";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { postUser } from "../../api/userApi";
@@ -76,7 +76,11 @@ function RegisterForm() {
                     />
                 </div>
                 <div className={styles.input_container}>
-                    <img src={email_icon} alt="email" />
+                    <img
+                        src={email_icon}
+                        className={styles.email_icon}
+                        alt="email"
+                    />
                     <input
                         className={styles.input}
                         type="email"

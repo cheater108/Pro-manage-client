@@ -6,15 +6,21 @@ import UserList from "../common/UserList";
 function ShareBoard({ setShowShare }) {
     const [assign, setAssign] = useState(false);
     const [user, setUser] = useState({ assigned_email: "" });
+    const [loading, setLoading] = useState(false);
     const [shared, setShared] = useState(false);
 
     function handleShare() {
+        setLoading(true);
         shareBoard({ share_email: user.assigned_email })
             .then((data) => {
-                console.log(data);
                 setShared(true);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(
+                    err.response?.data?.error || "something went wrong"
+                );
+                setLoading(false);
+            });
     }
 
     return (
@@ -58,7 +64,7 @@ function ShareBoard({ setShowShare }) {
                                 className={styles.add}
                                 onClick={handleShare}
                             >
-                                Add email
+                                {loading ? "Sharing..." : "Add email"}
                             </button>
                         </div>
                     </>

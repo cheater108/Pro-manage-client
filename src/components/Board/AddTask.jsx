@@ -18,9 +18,7 @@ function AddTask({ setShowAddTodo }) {
         due_date: "",
         assigned_email: "",
     });
-    const [todos, setTodos] = useState([
-        { task: "Task completed", done: false, id: 0 },
-    ]);
+    const [todos, setTodos] = useState([]);
     const [assign, setAssign] = useState(false);
     const [loading, setLoading] = useState(false);
     const dateRef = useRef(null);
@@ -28,7 +26,7 @@ function AddTask({ setShowAddTodo }) {
     function addTodo() {
         setTodos((prev) => [
             ...prev,
-            { task: "Task", done: false, id: Date.now() },
+            { task: "", done: false, id: Date.now() },
         ]);
     }
 
@@ -62,7 +60,9 @@ function AddTask({ setShowAddTodo }) {
                 setShowAddTodo(false);
             })
             .catch((err) => {
-                console.log(err);
+                toast.error(
+                    err.response?.data?.error || "something went wrong"
+                );
                 setLoading(false);
             });
     }
