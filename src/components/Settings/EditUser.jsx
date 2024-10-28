@@ -9,7 +9,6 @@ import { getUser, logout } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { validateEditUser } from "../../utils/validators";
-import { toFormData } from "axios";
 
 function EditUser() {
     const navigate = useNavigate();
@@ -68,7 +67,11 @@ function EditUser() {
                 />
             </div>
             <div className={styles.input_container}>
-                <img src={email_icon} alt="email" />
+                <img
+                    src={email_icon}
+                    className={styles.email_icon}
+                    alt="email"
+                />
                 <input
                     className={styles.input}
                     type="email"

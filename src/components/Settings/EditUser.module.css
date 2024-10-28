@@ -18,6 +18,11 @@
     width: 30px;
 }
 
+.email_icon {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
 .input {
     font-size: 1.1rem;
     border: none;

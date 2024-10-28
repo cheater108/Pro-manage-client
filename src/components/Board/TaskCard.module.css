@@ -135,7 +135,7 @@
     top: 40px;
     right: 13px;
     background-color: white;
-    padding: 1rem;
+    padding: 0.5rem;
     box-shadow: 0px 2px 22px 0px #7e7a7a40;
     border-radius: 12px;
     width: 45%;
@@ -144,15 +144,26 @@
 .menu_item {
     font-family: Poppins, sans-serif;
     font-weight: 500;
-    margin-bottom: 0.6rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 10px;
     cursor: pointer;
+}
+
+.menu_item:hover {
+    background-color: #e7e7e7;
 }
 
 .delete {
     color: var(--color-alert);
     font-family: Poppins, sans-serif;
     font-weight: 500;
+    padding: 0.4rem 0.5rem;
+    border-radius: 12px;
     cursor: pointer;
+}
+
+.delete:hover {
+    background-color: #e7e7e7;
 }
 
 .container_checkbox {

@@ -8,6 +8,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { useState } from "react";
 import Logout from "../../components/Board/Logout";
 
+// root dashboard layout
 function Dashboard() {
     const [showLogout, setShowLogout] = useState(false);
 

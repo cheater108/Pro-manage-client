@@ -18,11 +18,11 @@ function AddTask({ setShowAddTodo }) {
         due_date: "",
         assigned_email: "",
     });
-
     const [todos, setTodos] = useState([
         { task: "Task completed", done: false, id: 0 },
     ]);
     const [assign, setAssign] = useState(false);
+    const [loading, setLoading] = useState(false);
     const dateRef = useRef(null);
 
     function addTodo() {
@@ -54,14 +54,17 @@ function AddTask({ setShowAddTodo }) {
             }
             return;
         }
-
+        setLoading(true);
         postTask({ ...task, checklist: todos })
             .then(() => {
                 toast.success("Successfully created task");
                 updateBoard();
                 setShowAddTodo(false);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
     }
 
     function openCalender() {
@@ -199,7 +202,7 @@ function AddTask({ setShowAddTodo }) {
                             Cancel
                         </button>
                         <button className={styles.save} onClick={submitTask}>
-                            Save
+                            {loading ? "Saving..." : "Save"}
                         </button>
                     </div>
                 </div>

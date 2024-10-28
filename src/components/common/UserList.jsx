@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getUsers } from "../../api/userApi";
 import styles from "./UserList.module.css";
+import { getNameTag } from "../../utils/helpers";
 
 function UserList({ setUser, view }) {
     const [users, setUsers] = useState([]);
@@ -22,7 +23,9 @@ function UserList({ setUser, view }) {
             {users.map((user) => (
                 <div className={styles.email}>
                     <div className={styles.email_inner}>
-                        <div className={styles.initials}>AK</div>
+                        <div className={styles.initials}>
+                            {getNameTag(user.email)}
+                        </div>
                         <p className={styles.email_text}>{user.email}</p>
                     </div>
                     <button

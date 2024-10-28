@@ -20,6 +20,7 @@ function EditTask({ taskData, setEdit }) {
     const [task, setTask] = useState(taskData);
     const [todos, setTodos] = useState(taskData.checklist);
     const [assign, setAssign] = useState(false);
+    const [loading, setLoading] = useState(false);
     const dateRef = useRef(null);
 
     function addTodo() {
@@ -52,13 +53,17 @@ function EditTask({ taskData, setEdit }) {
             return;
         }
 
+        setLoading(true);
         updateTask(task._id, { ...task, checklist: todos })
             .then(() => {
                 toast.success("Successfully updated task");
                 updateBoard();
                 setEdit(false);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
     }
 
     function openCalender() {
@@ -198,7 +203,7 @@ function EditTask({ taskData, setEdit }) {
                             Cancel
                         </button>
                         <button className={styles.save} onClick={submitTask}>
-                            Save
+                            {loading ? "Updating..." : "Save"}
                         </button>
                     </div>
                 </div>

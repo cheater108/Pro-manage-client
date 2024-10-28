@@ -19,6 +19,7 @@ function RegisterForm() {
         password: "",
         confirm_pass: "",
     });
+    const [loading, setLoading] = useState(false);
 
     const input_type = showPass === false ? "password" : "text";
     const confirm_input_type = showConfirmPass === false ? "password" : "text";
@@ -39,14 +40,18 @@ function RegisterForm() {
             return;
         }
 
+        setLoading(true);
         postUser(userData)
             .then((data) => {
                 toast.success("User registered successfully");
                 navigate("/user");
             })
-            .catch((err) =>
-                toast.error(err.response?.data?.error || "something went wrong")
-            );
+            .catch((err) => {
+                toast.error(
+                    err.response?.data?.error || "something went wrong"
+                );
+                setLoading(false);
+            });
     }
 
     return (
@@ -134,7 +139,7 @@ function RegisterForm() {
                     />
                 </div>
                 <button className={`${styles.btn} ${styles.login_btn}`}>
-                    Register
+                    {loading ? "Registering user..." : "Register"}
                 </button>
             </form>
             <p className={styles.para}>Have an account ?</p>

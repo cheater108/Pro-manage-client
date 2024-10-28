@@ -1,7 +1,7 @@
 import styles from "./LoginForm.module.css";
-import email_icon from "../../assets/email.png";
-import lock_icon from "../../assets/lock.png";
-import view_icon from "../../assets/view.png";
+import email_icon from "../../assets/email.svg";
+import lock_icon from "../../assets/lock.svg";
+import view_icon from "../../assets/view.svg";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { postLogin } from "../../api/userApi";
@@ -12,6 +12,7 @@ function LoginForm() {
     const navigate = useNavigate();
     const [showPass, setShowPass] = useState(false);
     const [userData, setUserData] = useState({ email: "", password: "" });
+    const [loading, setLoading] = useState(false);
 
     const input_type = showPass === false ? "password" : "text";
 
@@ -25,6 +26,7 @@ function LoginForm() {
             return;
         }
 
+        setLoading(true);
         postLogin(userData)
             .then((data) => {
                 localStorage.setItem("token", data.token);
@@ -32,16 +34,23 @@ function LoginForm() {
                 localStorage.setItem("name", data.name);
                 navigate("/dashboard");
             })
-            .catch((err) =>
-                toast.error(err.response?.data?.error || "something went wrong")
-            );
+            .catch((err) => {
+                toast.error(
+                    err.response?.data?.error || "something went wrong"
+                );
+                setLoading(false);
+            });
     }
     return (
         <div className={styles.outer}>
             <h1 className={styles.login}>Login</h1>
             <form onSubmit={handleSubmit} className={styles.form}>
                 <div className={styles.input_container}>
-                    <img src={email_icon} alt="email" />
+                    <img
+                        src={email_icon}
+                        className={styles.email_icon}
+                        alt="email"
+                    />
                     <input
                         className={styles.input}
                         type="email"
@@ -84,7 +93,7 @@ function LoginForm() {
                     type="submit"
                     className={`${styles.btn} ${styles.login_btn}`}
                 >
-                    Log in
+                    {loading ? "Logging in..." : "Log in"}
                 </button>
             </form>
             <p className={styles.para}>Have no account yet?</p>

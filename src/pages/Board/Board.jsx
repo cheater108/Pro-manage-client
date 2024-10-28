@@ -8,7 +8,7 @@ import { getCurrentDate, getUser } from "../../utils/helpers";
 import ShareBoard from "../../components/Board/ShareBoard";
 
 function Board() {
-    const { board, filter, updateBoard, setFilter } = useContext(BoardContext);
+    const { board, filter, setFilter } = useContext(BoardContext);
     const [showShare, setShowShare] = useState(false);
     const [showFilter, setShowFilter] = useState(false);
 

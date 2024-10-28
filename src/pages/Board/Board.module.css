@@ -81,8 +81,7 @@
     position: absolute;
     background-color: white;
     width: 150px;
-    padding: 1rem;
-    padding-bottom: 5px;
+    padding: 0.5rem;
     box-shadow: 0px 2px 22px 0px #7e7a7a40;
     border-radius: 12px;
     right: 0px;
@@ -93,6 +92,11 @@
 .option {
     font-family: Poppins, sans-serif;
     font-weight: 500;
-    margin-bottom: 0.6rem;
     cursor: pointer;
+    padding: 0.4rem 0.5rem;
+    border-radius: 12px;
+}
+
+.option:hover {
+    background-color: #e7e7e7;
 }
