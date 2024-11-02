@@ -3,6 +3,7 @@ import styles from "./DeleteTask.module.css";
 import { deleteTask } from "../../api/taskApi";
 import { useContext } from "react";
 import { BoardContext } from "../common/BoardProvider";
+import toast from "react-hot-toast";
 
 function DeleteTask({ id, setDel }) {
     const { updateBoard } = useContext(BoardContext);
@@ -12,7 +13,10 @@ function DeleteTask({ id, setDel }) {
                 updateBoard();
                 setDel(false);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                console.log(err);
+                toast.error("No such task, might already be deleted.");
+            });
     }
     return (
         <div className={modal_style.modal}>

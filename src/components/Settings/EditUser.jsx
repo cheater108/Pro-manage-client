@@ -20,6 +20,7 @@ function EditUser() {
     });
     const [showPass, setShowPass] = useState(false);
     const [showNewPass, setShowNewPass] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const input_type = showPass === false ? "password" : "text";
     const new_pass_type = showNewPass === false ? "password" : "text";
@@ -34,14 +35,23 @@ function EditUser() {
                 return;
             }
         }
+        setLoading(true);
         editUser(userData)
             .then((data) => {
-                logout();
-                navigate("/user");
+                toast.success(
+                    "Details updated successfully, Please Login again."
+                );
+                setTimeout(() => {
+                    logout();
+                    navigate("/user");
+                }, 800);
             })
-            .catch((err) =>
-                toast.error(err.response?.data?.error || "something went wrong")
-            );
+            .catch((err) => {
+                toast.error(
+                    err.response?.data?.error || "something went wrong"
+                );
+                setLoading(false);
+            });
     }
     return (
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -137,7 +147,7 @@ function EditUser() {
                 />
             </div>
             <button className={`${styles.btn} ${styles.login_btn}`}>
-                Update
+                {loading ? "Updating..." : "Update"}
             </button>
         </form>
     );

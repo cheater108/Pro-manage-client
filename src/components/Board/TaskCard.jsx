@@ -131,7 +131,7 @@ function TaskCard({ task, cardType, collapse }) {
                 </div>
             </div>
             {show && (
-                <div className={styles.task_list_container}>
+                <div className={`${styles.task_list_container}`}>
                     {todos.map((todo) => (
                         <Todo
                             key={todo._id}
